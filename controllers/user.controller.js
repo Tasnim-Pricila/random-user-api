@@ -99,6 +99,13 @@ const updateUser = (req, res) => {
 // Bulk Update 
 const bulkUpdate = (req, res) => {
     const { id, updatedData } = req.body;
+    
+    if(!Array.isArray(id)){
+        return res.status(500).send({
+            status: false,
+            message: `Write a json where id will be a array and updatedData will be a object.Body will be look like this { "id": [1, 2],"updatedData": {"gender": "male", "name": "Noyon"}} `
+        })
+    }
     for (let i = 0; i < id.length; i++) {
         let updatedID = id[i];
         const findUser = users.find(user => user.id == updatedID)
