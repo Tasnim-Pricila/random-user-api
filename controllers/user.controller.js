@@ -57,13 +57,20 @@ const getAllUsers = (req, res) => {
 // Delete USer 
 const deleteUser = (req, res) => {
     const { id } = req.params;
-    const newData = users.filter(user => +user.id !== +id);
-    fs.writeFileSync("users.json", JSON.stringify(newData))
-    res.status(200).send({
-        status: true,
-        message: "User deleted successfully",
-        data: newData
-    });
+    const IDFound = users.find(user => +user.id === +id);
+    if (!IDFound) {
+        return res.status(500).send("Provided ID not found")
+    }
+    else {
+        const newData = users.filter(user => +user.id !== +id);
+        fs.writeFileSync("users.json", JSON.stringify(newData))
+        res.status(200).send({
+            status: true,
+            message: "User deleted successfully",
+            data: newData
+        });
+    }
+
 }
 
 // Update User 
@@ -89,10 +96,33 @@ const updateUser = (req, res) => {
     }
 }
 
+// Bulk Update 
+const bulkUpdate = (req, res) => {
+    const { id, updatedData } = req.body;
+    for (let i = 0; i < id.length; i++) {
+        let updatedID = id[i];
+        const findUser = users.find(user => user.id == updatedID)
+
+        if (!findUser) return res.status(500).send("User ID not found");
+
+        else {
+            const index = users.indexOf(findUser);
+            users[index] = { ...findUser, ...updatedData };
+        }
+    }
+    fs.writeFileSync("users.json", JSON.stringify(users))
+    res.status(200).send({
+        status: true,
+        message: "User updated successfully",
+        data: users
+    });
+}
+
 module.exports = {
     getRandomUser,
     saveAUser,
     getAllUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    bulkUpdate
 }
