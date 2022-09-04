@@ -54,6 +54,18 @@ const getAllUsers = (req, res) => {
         });
 }
 
+// Delete USer 
+const deleteUser = (req, res) => {
+    const { id } = req.params;
+    const newData = users.filter(user => +user.id !== +id);
+    fs.writeFileSync("users.json", JSON.stringify(newData))
+    res.status(200).send({
+        status: true,
+        message: "User deleted successfully",
+        data: newData
+    });
+}
+
 module.exports = {
     getRandomUser,
     saveAUser,

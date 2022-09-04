@@ -12,4 +12,7 @@ router.route('/random')
 router.route('/all')
         .get(userController.getAllUsers)
 
+router.route('/delete/:id')
+        .delete(userController.deleteUser)
+
 module.exports = router;
