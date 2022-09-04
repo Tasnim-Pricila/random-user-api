@@ -15,4 +15,7 @@ router.route('/all')
 router.route('/delete/:id')
         .delete(userController.deleteUser)
 
+router.route('/update/:id')
+        .patch(userController.updateUser)
+
 module.exports = router;

@@ -66,8 +66,33 @@ const deleteUser = (req, res) => {
     });
 }
 
+// Update User 
+const updateUser = (req, res) => {
+    const { id } = req.params;
+    const updateUser = users.find(user => +user.id === +id);
+    if (!updateUser) {
+        return res.status(500).send("Provided ID not found")
+    }
+    const updatedData = req.body;
+    if (Object.keys(updatedData).length === 0) {
+        return res.status(500).send("Provide a json file to update data")
+    }
+    else {
+        const index = users.indexOf(updateUser);
+        users[index] = { ...updateUser, ...updatedData };
+        fs.writeFileSync("users.json", JSON.stringify(users))
+        res.status(200).send({
+            status: true,
+            message: "User updated successfully",
+            data: users
+        });
+    }
+}
+
 module.exports = {
     getRandomUser,
     saveAUser,
-    getAllUsers
+    getAllUsers,
+    deleteUser,
+    updateUser
 }
