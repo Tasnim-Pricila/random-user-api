@@ -43,7 +43,19 @@ const getRandomUser = (req, res) => {
         });
 }
 
+// All USer 
+const getAllUsers = (req, res) => {
+    const { limit } = req.query;
+    res.status(200)
+        .send({
+            status: true,
+            message: "Users found successfully",
+            data: users.slice(0, limit)
+        });
+}
+
 module.exports = {
     getRandomUser,
-    saveAUser
+    saveAUser,
+    getAllUsers
 }
